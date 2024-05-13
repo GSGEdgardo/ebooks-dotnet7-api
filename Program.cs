@@ -25,7 +25,7 @@ async Task<IResult> CreateEBookAsync(DataContext context)
 */
 
 app.MapGet("/api/ebook", async (DataContext db) =>
-    await db.EBooks.ToDictionaryAsync(e => e.Title)
+    await db.EBooks.ToListAsync()
 );
 
 //Create Ebook With Author and Title being unique validation
