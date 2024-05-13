@@ -31,15 +31,16 @@ app.MapGet("/api/ebook", async (DataContext db) =>
 //Create Ebook With Author and Title being unique validation
 app.MapPost("/api/ebook", async (DataContext db, CreateEbookDto createEbookDto) =>
 {
-    var existingEbook = await db.EBooks.Where(e => 
-                                                e.Title == createEbookDto.Title 
-                                            &&  e.Author == createEbookDto.Author).FirstOrDefaultAsync();
-    if(existingEbook is not null)
+    var existingEbook = await db.EBooks.Where(e =>
+                                                e.Title == createEbookDto.Title
+                                            && e.Author == createEbookDto.Author).FirstOrDefaultAsync();
+    if (existingEbook is not null)
     {
         return TypedResults.BadRequest("El libro que intenta ingresar ya está registrado en el sistema");
     }
 
-    var ebook = new EBook{
+    var ebook = new EBook
+    {
         Title = createEbookDto.Title,
         Author = createEbookDto.Author,
         Genre = createEbookDto.Genre,
@@ -55,36 +56,36 @@ app.MapPost("/api/ebook", async (DataContext db, CreateEbookDto createEbookDto) 
 });
 
 
-app.MapPut("/api/ebook/{id}", async(int id, EditEbookDto editEbookDto, DataContext db) => 
+app.MapPut("/api/ebook/{id}", async (int id, EditEbookDto editEbookDto, DataContext db) =>
 {
     var existingEbook = await db.EBooks.FindAsync(id);
 
-    if(existingEbook is null)
+    if (existingEbook is null)
     {
         return Results.NotFound();
     }
 
-    if(editEbookDto.Title != string.Empty)
+    if (editEbookDto.Title != string.Empty)
     {
         existingEbook.Title = editEbookDto.Title;
     }
 
-    if(editEbookDto.Author != string.Empty)
+    if (editEbookDto.Author != string.Empty)
     {
         existingEbook.Author = editEbookDto.Author;
     }
 
-    if(editEbookDto.Genre != string.Empty)
+    if (editEbookDto.Genre != string.Empty)
     {
         existingEbook.Genre = editEbookDto.Genre;
     }
 
-    if(editEbookDto.Format != string.Empty)
+    if (editEbookDto.Format != string.Empty)
     {
         existingEbook.Format = editEbookDto.Format;
     }
 
-    if(editEbookDto.Price > 0)
+    if (editEbookDto.Price > 0)
     {
         existingEbook.Price = editEbookDto.Price;
     }
@@ -97,8 +98,8 @@ app.MapPut("/api/ebook/{id}", async(int id, EditEbookDto editEbookDto, DataConte
 app.MapPut("/api/ebook/{id}/change-availability", async (int id, DataContext db) =>
 {
     var existingEbook = await db.EBooks.FindAsync(id);
-    
-    if(existingEbook.IsAvailable == true)
+
+    if (existingEbook.IsAvailable == true)
     {
         existingEbook.IsAvailable = false;
         await db.SaveChangesAsync();
@@ -109,39 +110,45 @@ app.MapPut("/api/ebook/{id}/change-availability", async (int id, DataContext db)
     return Results.Ok("El libro ahora está disponible");
 });
 
-app.MapPut("/api/ebook/{id}/increment-stock", async (int id, DataContext db, UpdateStockDto updateStockDto) => 
+app.MapPut("/api/ebook/{id}/increment-stock", async (int id, DataContext db, UpdateStockDto updateStockDto) =>
 {
     var existingEbook = await db.EBooks.Where(e => e.Id == id).FirstOrDefaultAsync();
-    if(updateStockDto.Stock <= 0)
+    if (updateStockDto.Stock <= 0)
     {
         return TypedResults.BadRequest("Ingrese un stock que sea mayor a 0");
     }
-    
+
+    if (existingEbook.IsAvailable == false)
+    {
+        return TypedResults.BadRequest("El libro no está disponible");
+    }
+
+
     existingEbook.Stock += updateStockDto.Stock;
     await db.SaveChangesAsync();
     return Results.Ok();
 });
 
-app.MapPost("/api/ebook/purchase", async(DataContext db, PurchaseEbookDto purchaseEbookDto) => 
+app.MapPost("/api/ebook/purchase", async (DataContext db, PurchaseEbookDto purchaseEbookDto) =>
 {
     var existingEbook = await db.EBooks.Where(e => e.Id == purchaseEbookDto.Id).FirstOrDefaultAsync();
 
-    if(existingEbook is null)
+    if (existingEbook is null)
     {
         return TypedResults.BadRequest("El libro que quieres comprar no existe");
     }
 
-    if(existingEbook.IsAvailable == false)
+    if (existingEbook.IsAvailable == false)
     {
         return TypedResults.BadRequest("El libro no está disponible");
     }
 
-    if(purchaseEbookDto.Cantidad > existingEbook.Stock)
+    if (purchaseEbookDto.Cantidad > existingEbook.Stock)
     {
         return TypedResults.BadRequest("No hay suficientes libros en stock para realizar la venta");
     }
     int total = purchaseEbookDto.Cantidad * existingEbook.Price;
-    if(total != purchaseEbookDto.Pago)
+    if (total != purchaseEbookDto.Pago)
     {
         return TypedResults.BadRequest("El monto total del pago no coincide con el monto necesario a pagar.");
     }
@@ -151,9 +158,9 @@ app.MapPost("/api/ebook/purchase", async(DataContext db, PurchaseEbookDto purcha
     return Results.Ok("Se ha realizado la compra!");
 });
 
-app.MapDelete("/api/ebook/{id}", async(DataContext db, int id) =>
+app.MapDelete("/api/ebook/{id}", async (DataContext db, int id) =>
 {
-    if(await db.EBooks.FindAsync(id) is EBook ebook)
+    if (await db.EBooks.FindAsync(id) is EBook ebook)
     {
         db.EBooks.Remove(ebook);
         await db.SaveChangesAsync();
