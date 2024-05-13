@@ -1,0 +1,190 @@
+{
+	"info": {
+		"_postman_id": "ae6152fd-6884-4b73-927d-f319275c0844",
+		"name": "Catedra1",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26766428",
+		"_collection_link": "https://lively-crescent-763225.postman.co/workspace/IDWM~f4bbb70e-6331-4ee1-a1e6-01e89f43e91c/collection/26766428-ae6152fd-6884-4b73-927d-f319275c0844?action=share&source=collection_link&creator=26766428"
+	},
+	"item": [
+		{
+			"name": "GetEbook",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{api}}/ebook?genre=genero2",
+					"host": [
+						"{{api}}"
+					],
+					"path": [
+						"ebook"
+					],
+					"query": [
+						{
+							"key": "genre",
+							"value": "genero2"
+						},
+						{
+							"key": "Format",
+							"value": "fomato1",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CreateEbook",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"Title\":\"aatitulo1\",\r\n    \"Author\":\"Autor1\",\r\n    \"Genre\":\"genero1\",\r\n    \"Format\":\"formato1\",\r\n    \"Price\":10000\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{api}}/ebook",
+					"host": [
+						"{{api}}"
+					],
+					"path": [
+						"ebook"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "EditEbook",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"Title\":\"titulo1 modificado\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{api}}/ebook/1",
+					"host": [
+						"{{api}}"
+					],
+					"path": [
+						"ebook",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Change availability",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "{{api}}/ebook/1/change-availability",
+					"host": [
+						"{{api}}"
+					],
+					"path": [
+						"ebook",
+						"1",
+						"change-availability"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Increment stock",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"Stock\":200\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{api}}/ebook/1/increment-stock",
+					"host": [
+						"{{api}}"
+					],
+					"path": [
+						"ebook",
+						"1",
+						"increment-stock"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Purchase Ebook",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"Id\":1,\r\n    \"Cantidad\":1,\r\n    \"Pago\":10000\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{api}}/ebook/purchase",
+					"host": [
+						"{{api}}"
+					],
+					"path": [
+						"ebook",
+						"purchase"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Ebook",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{api}}/ebook/1",
+					"host": [
+						"{{api}}"
+					],
+					"path": [
+						"ebook",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "api",
+			"value": "http://localhost:5000/api"
+		}
+	]
+}
