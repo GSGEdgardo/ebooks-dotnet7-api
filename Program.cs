@@ -97,6 +97,7 @@ app.MapPut("/api/ebook/{id}", async(int id, EditEbookDto editEbookDto, DataConte
 app.MapPut("/api/ebook/{id}/change-availability", async (int id, DataContext db) =>
 {
     var existingEbook = await db.EBooks.FindAsync(id);
+    
     if(existingEbook.IsAvailable == true)
     {
         existingEbook.IsAvailable = false;
@@ -128,6 +129,11 @@ app.MapPost("/api/ebook/purchase", async(DataContext db, PurchaseEbookDto purcha
     if(existingEbook is null)
     {
         return TypedResults.BadRequest("El libro que quieres comprar no existe");
+    }
+
+    if(existingEbook.IsAvailable == false)
+    {
+        return TypedResults.BadRequest("El libro no está disponible");
     }
 
     if(purchaseEbookDto.Cantidad > existingEbook.Stock)
