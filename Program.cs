@@ -55,15 +55,6 @@ app.MapPost("/api/ebook", async (DataContext db, CreateEbookDto createEbookDto) 
 });
 
 
-// app.MapPost("/api/ebook", async (DataContext db, EBook eBook) =>
-// {
-//     eBook.IsAvailable = true;
-//     eBook.Stock = 0;
-//     db.EBooks.Add(eBook);
-//     await db.SaveChangesAsync();
-//     return Results.Created($"/api/ebook/{eBook.Id}", eBook);
-// });
-
 app.MapPut("/api/ebook/{id}", async(int id, EditEbookDto editEbookDto, DataContext db) => 
 {
     var existingEbook = await db.EBooks.FindAsync(id);
